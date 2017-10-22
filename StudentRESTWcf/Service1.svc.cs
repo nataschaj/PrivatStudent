@@ -19,8 +19,8 @@ namespace StudentRESTWcf
                "Server=tcp:natascha.database.windows.net,1433;Initial Catalog=School;Persist Security Info=False;User ID=nataschajakobsen;Password=Roskilde4000;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
         #endregion
 
-        #region POST
-        public Student AddLys(Student elev)
+        #region CREATE (POST)
+        public Student AddStudent(Student elev)
         {
             const string postStudent = "insert into Student (Name, Age) values (@Name, @Age)";
 
@@ -28,10 +28,10 @@ namespace StudentRESTWcf
             {
 
                 conn.Open();
-                using (SqlCommand insertCommand = new SqlCommand(postStudent, conn))
+                using (SqlCommand insertcmd = new SqlCommand(postStudent, conn))
                 {
-                    insertCommand.Parameters.AddWithValue("@Name", elev);
-                    insertCommand.Parameters.AddWithValue("@Age", elev);
+                    insertcmd.Parameters.AddWithValue("@Name", elev);
+                    insertcmd.Parameters.AddWithValue("@Age", elev);
                     
                     
                 }
@@ -41,9 +41,102 @@ namespace StudentRESTWcf
 
         }
         #endregion
+              
+        #region READ (GET)
+        public IList<Student> GetAllStudents()
+        {
+            const string sqlstring = "SELECT * from dbo.Student order by id";
+            List<Student> liste = new List<Student>();
+
+
+            using (SqlConnection conn = new SqlConnection(connectingString))
+            {
+                conn.Open();
+                //using (var sqlCommand = new SqlCommand(sqlstring, conn))
+                //{
+                //    using (var reader = sqlCommand.ExecuteReader())
+                //    {
+                //        List<Student> liste = new List<Student>();
+                //        while (reader.Read())
+                //        {
+                //            var _Apartment = ReadApartment(reader);
+                //            liste.Add(_Apartment);
+                //        }
+                //        return liste;
+                //    }
+                //}
+
+                SqlCommand command = new SqlCommand(sqlstring, conn);
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Student nystudent = new Student();
+
+                    nystudent.Id = reader.GetInt32(0);
+                    nystudent.Name = reader.GetString(1);
+                    nystudent.Age = reader.GetInt32(2);
+
+                    liste.Add(nystudent);
+                }
+                
+            }
+            return liste;
+        }
+        #endregion
+        
+        #region UPDATE (PUT)
+        public void UpdateApartment(string id, Student age)
+        {
+            //using (SqlConnection conn = new SqlConnection(connectingString))
+            //{
+
+            //    conn.Open();
+            //    using (SqlCommand insertCommand = new SqlCommand($"update Student set Age = @Age WHERE Id = @Id", conn))
+            //    {
+            //        insertCommand.Parameters.AddWithValue("@Age", age);
+                    
+            //        insertCommand.ExecuteNonQuery();
+
+            //    }
+            //}
+
+            string sqlstring = $"UPDATE Student SET Age = {age.Age}";
+            using (SqlConnection sqlConnection = new SqlConnection(connectingString))
+            {
+                sqlConnection.Open();
+                using (var sqlcommand = new SqlCommand(sqlstring, sqlConnection))
+                {
+                    SqlDataReader reader = sqlcommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+
+                    }
+
+                }
+            }
+        }
+        #endregion
+
+        #region DELETE
+        public void Deleteaparment(string studentid)
+        {
+            using (SqlConnection conn = new SqlConnection(connectingString))
+            {
+                conn.Open();
+                using (SqlCommand insertCommand = new SqlCommand($"DELETE FROM Student WHERE Id = @Id", conn))
+                {
+                    insertCommand.Parameters.AddWithValue("@Id", studentid);
+                    insertCommand.ExecuteNonQuery();
+                }
+            }
+
+           
+        }
+        #endregion
 
         #region Create fail
-        public void CreateAparment(string elev)
+        public void CreateStudent(string elev)
         {
 
             //const string postStudent = "insert into Student (Name) values (@Name)";
@@ -116,7 +209,7 @@ namespace StudentRESTWcf
 
 
 
-            //            .Add(newapartment);
+            //            .Add(newstudent);
             //        }
 
             //    }
@@ -124,100 +217,6 @@ namespace StudentRESTWcf
 
         }
         #endregion 
-
-        #region READ HTTP (GET kald)
-        public IList<Student> GetAllStudents()
-        {
-            const string sqlstring = "SELECT * from dbo.Student order by id";
-            List<Student> liste = new List<Student>();
-
-
-            using (SqlConnection conn = new SqlConnection(connectingString))
-            {
-                conn.Open();
-                //using (var sqlCommand = new SqlCommand(sqlstring, conn))
-                //{
-                //    using (var reader = sqlCommand.ExecuteReader())
-                //    {
-                //        List<Student> liste = new List<Student>();
-                //        while (reader.Read())
-                //        {
-                //            var _Apartment = ReadApartment(reader);
-                //            liste.Add(_Apartment);
-                //        }
-                //        return liste;
-                //    }
-                //}
-
-                SqlCommand command = new SqlCommand(sqlstring, conn);
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    Student nystudent = new Student();
-
-                    nystudent.Id = reader.GetInt32(0);
-                    nystudent.Name = reader.GetString(1);
-                    nystudent.Age = reader.GetInt32(2);
-
-                    liste.Add(nystudent);
-                }
-                
-            }
-            return liste;
-        }
-        #endregion
-
-
-        #region PUT (UPDATE)
-        public void UpdateApartment(string id, Student age)
-        {
-            //using (SqlConnection conn = new SqlConnection(connectingString))
-            //{
-
-            //    conn.Open();
-            //    using (SqlCommand insertCommand = new SqlCommand($"update Student set Age = @Age WHERE Id = @Id", conn))
-            //    {
-            //        insertCommand.Parameters.AddWithValue("@Age", age);
-                    
-            //        insertCommand.ExecuteNonQuery();
-
-            //    }
-            //}
-
-            string sqlstring = $"UPDATE Student SET Age = {age.Age}";
-            using (SqlConnection sqlConnection = new SqlConnection(connectingString))
-            {
-                sqlConnection.Open();
-                using (var sqlcommand = new SqlCommand(sqlstring, sqlConnection))
-                {
-                    SqlDataReader reader = sqlcommand.ExecuteReader();
-                    while (reader.Read())
-                    {
-
-                    }
-
-                }
-            }
-        }
-        #endregion
-
-        #region DELETE
-        public void Deleteaparment(string studentid)
-        {
-            using (SqlConnection conn = new SqlConnection(connectingString))
-            {
-                conn.Open();
-                using (SqlCommand insertCommand = new SqlCommand($"DELETE FROM Student WHERE Id = @Id", conn))
-                {
-                    insertCommand.Parameters.AddWithValue("@Id", studentid);
-                    insertCommand.ExecuteNonQuery();
-                }
-            }
-
-           
-        }
-        #endregion
 
     }
 }

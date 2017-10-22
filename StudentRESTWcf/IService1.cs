@@ -39,7 +39,7 @@ namespace StudentRESTWcf
             ResponseFormat = WebMessageFormat.Json,
             RequestFormat = WebMessageFormat.Json,
             UriTemplate = "student/")]
-        void CreateAparment(string elev);
+        void CreateStudent(string elev);
 
 
         [OperationContract]
@@ -47,7 +47,7 @@ namespace StudentRESTWcf
             ResponseFormat = WebMessageFormat.Json,
             RequestFormat = WebMessageFormat.Json,
             UriTemplate = "student/")]
-        Student AddLys(Student elev);
+        Student AddStudent(Student elev);
 
 
         [OperationContract]
