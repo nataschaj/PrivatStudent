@@ -31,7 +31,7 @@ namespace StudentRESTWcf
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "student/{id}")]
-        void Deleteaparment(string id);
+        void DeleteStudent(string id);
 
 
         [OperationContract]

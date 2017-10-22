@@ -119,7 +119,7 @@ namespace StudentRESTWcf
         #endregion
 
         #region DELETE
-        public void Deleteaparment(string studentid)
+        public void DeleteStudent(string studentid)
         {
             using (SqlConnection conn = new SqlConnection(connectingString))
             {
