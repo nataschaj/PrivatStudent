@@ -86,7 +86,7 @@ namespace StudentRESTWcf
         #endregion
         
         #region UPDATE (PUT)
-        public void UpdateApartment(string id, Student age)
+        public void UpdateStudent(string id, Student age)
         {
             //using (SqlConnection conn = new SqlConnection(connectingString))
             //{

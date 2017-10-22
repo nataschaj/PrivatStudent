@@ -55,7 +55,7 @@ namespace StudentRESTWcf
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "student/{id}")]
-        void UpdateApartment(string id, Student age);
+        void UpdateStudent(string id, Student age);
 
 
     }
